@@ -1,19 +1,21 @@
 .DEFAULT_GOAL = gloner
 .PHONY = clean
 
-files = header.sh parse.sh gloner.sh
+files = header.sh functions.sh parse.sh gloner.sh
 
 
 gloner: $(files)
-	cp  executable   gloner
-	echo          >> gloner
-	cat header.sh >> gloner
-	echo          >> gloner
-	cat parse.sh  >> gloner
-	echo          >> gloner
-	cat gloner.sh >> gloner
+	cp  executable       gloner
+	echo              >> gloner
+	cat header.sh     >> gloner
+	echo              >> gloner
+	cat functions.sh  >> gloner
+	echo              >> gloner
+	cat parse.sh      >> gloner
+	echo              >> gloner
+	cat gloner.sh     >> gloner
 
-# You should run before every commit
+# You should run before every stable commit
 copy: gloner
 	mv gloner ../
 
