@@ -6,8 +6,11 @@ files = header.sh parse.sh gloner.sh
 
 gloner: $(files)
 	cp  executable   gloner
+	echo          >> gloner
 	cat header.sh >> gloner
+	echo          >> gloner
 	cat parse.sh  >> gloner
+	echo          >> gloner
 	cat gloner.sh >> gloner
 
 # You should run before every commit
