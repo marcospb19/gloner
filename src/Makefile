@@ -10,6 +10,10 @@ gloner: $(files)
 	cat parse.sh  >> gloner
 	cat gloner.sh >> gloner
 
+# You should run before every commit
+copy: gloner
+	mv gloner ../
+
 clean:
 	@echo "rm gloner"
 	@rm gloner 2> /dev/null || exit 0
