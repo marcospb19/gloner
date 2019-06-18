@@ -1,5 +1,13 @@
 # functions.sh
 
+function show_version()
+{
+	echo "gloner v0.0."
+	echo "Licensed under MIT."
+	echo "From https://github.com/marcospb19/gloner, feel free to report your"
+	echo "issues and feature requests, as well as contributing in other ways :)"
+}
+
 function show_help()
 {
 	echo "Usage: gloner [-h | --help] [-V | --version] [-v | --verbose]"
@@ -11,7 +19,6 @@ function show_help()
 
 	# echo "          help  <Command>
 	# echo "          clone <User> [Repository] [Target]
-	exit 0
 }
 
 function help_command()
