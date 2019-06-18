@@ -1,3 +1,6 @@
-# A useful test folder
+# A useful test folder and file
 test/
 test.sh
+
+# Builded gloner inside the src folder (should be on repo root)
+src/gloner
