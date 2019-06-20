@@ -1,5 +1,11 @@
 # functions.sh
 
+# Enable aliases in the script
+shopt -s expand_aliases
+
+# echo to the stderr
+alias echoerr="echo >&2"
+
 function show_version()
 {
 	echo "gloner v0.0."
