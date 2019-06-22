@@ -21,7 +21,7 @@ function parse_flags()
 			http*)   http="true"    ;;
 			ssh)     ssh="true"     ;;
 
-			*) echo "Option '-$arg' not recognized, see gloner --help."
+			*) echo "Option '--$arg' not recognized, see gloner --help."
 				exit 1 ;;
 		esac
 	else
