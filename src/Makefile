@@ -1,20 +1,24 @@
 .DEFAULT_GOAL = gloner
 .PHONY = clean
 
-files = executable header.sh functions.sh parse.sh remote.sh gloner.sh
+files = executable header.sh help.sh functions.sh clone.sh parse.sh remote.sh gloner.sh
 
 
 gloner: $(files)
 	cp  executable       gloner
-	echo              >> gloner
+	@echo             >> gloner
 	cat header.sh     >> gloner
-	echo              >> gloner
+	@echo             >> gloner
 	cat functions.sh  >> gloner
-	echo              >> gloner
+	@echo             >> gloner
+	cat help.sh       >> gloner
+	@echo             >> gloner
 	cat parse.sh      >> gloner
-	echo              >> gloner
+	@echo             >> gloner
+	cat clone.sh      >> gloner
+	@echo             >> gloner
 	cat remote.sh     >> gloner
-	echo              >> gloner
+	@echo             >> gloner
 	cat gloner.sh     >> gloner
 
 # Should be ran before every stable commit
