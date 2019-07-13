@@ -13,3 +13,5 @@
 #  From https://github.com/marcospb19/gloner, feel free to report your
 #  issues and feature requests, as well as contributing in other ways :)
 #
+
+version="0.0"
