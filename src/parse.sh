@@ -75,3 +75,24 @@ function parse_arguments()
 		exit 1
 	fi
 }
+
+# Checks if array of arguments are valid
+# directories, if one of them isn't, exit
+function check_directories()
+{
+	exit=""
+
+	for i in "$@"; do
+		# If isn't a directory
+		if [[ ! -d "$i" ]]; then
+			exit="true"
+			echoerr "'$i' is not a directory"
+
+		fi
+	done
+
+	# Note that this function lists every fail before exiting
+	if [[ "$exit" == "true" ]]; then
+		exit 1
+	fi
+}

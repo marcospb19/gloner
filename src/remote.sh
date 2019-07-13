@@ -7,23 +7,10 @@
 # Example: gloner geturl folder1/ folder2/
 function get_url()
 {
-	# Boolean to enable printing every directory that failed before exiting
-	local exit=""
+	# Check if the arguments are valid directories, and exit if they
+	check_directories "$@"
 
-	# Check if all the arguments are valid directories
-	for i in "$@"; do
-		if [[ ! -d "$i" ]]; then
-			exit="true"
-			echoerr "'$i' is not a directory"
-
-		fi
-	done
-
-	if [[ "$exit" ]]; then
-		exit 2
-	fi
-
-	# Path to return after every cd
+	# Path to return after every cd travel
 	local return_path=$(pwd)
 
 	for i in "$@"; do
