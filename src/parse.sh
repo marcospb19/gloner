@@ -17,9 +17,10 @@ function parse_flags()
 			help)    show_help    ; exit 0 ;;
 			version) show_version ; exit 0 ;;
 
-			verbose) verbose="true" ;;
-			http*)   http="true"    ;;
-			ssh)     ssh="true"     ;;
+			recursive) recursive="true" ;;
+			verbose)   verbose="true"   ;;
+			http*)     http="true"      ;;
+			ssh)       ssh="true"       ;;
 
 			*) echo "Option '--$arg' not recognized, see gloner --help."
 				exit 1 ;;
@@ -39,7 +40,8 @@ function parse_flags()
 				h) show_help    ; exit 0 ;;
 				V) show_version ; exit 0 ;;
 
-				v) verbose="true"        ;;
+				R) recursive="true" ;;
+				v) verbose="true"   ;;
 
 				*) echo "Unknown option '-$arg', see gloner --help."
 					exit 1 ;;
@@ -49,7 +51,8 @@ function parse_flags()
 	fi
 }
 
-# Receives all arguments passed to gloner
+# Receives all arguments passed to gloner and filter flags
+# Returns $arguments and $number_of_arguments
 function parse_arguments()
 {
 	arguments=()
@@ -62,4 +65,13 @@ function parse_arguments()
 			arguments+=("$i")
 		fi
 	done
+
+	number_of_arguments="${#arguments[@]}"
+
+	# If no command is given
+	if [[ "$number_of_arguments" == 0 ]]; then
+		echo "No command given."
+		show_help
+		exit 1
+	fi
 }
