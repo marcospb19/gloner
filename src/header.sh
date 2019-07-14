@@ -14,4 +14,4 @@
 #  issues and feature requests, as well as contributing in other ways :)
 #
 
-version="0.0"
+version="1.0"

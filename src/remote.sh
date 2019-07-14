@@ -7,9 +7,9 @@
 # Example: gloner geturl folder1/ folder2/
 function get_url()
 {
+	# If no folders passed, execute on current folder
 	if [[ "$#" == 0 ]]; then
-		echoerr "No arguments given."
-		exit 1
+		1="."
 	fi
 
 	# Check if the arguments are valid directories, and exit if they aren't
@@ -54,7 +54,7 @@ function set_ssh()
 		cd "$i"
 
 		local old_remote=$(git remote -v | \
-			head -1 | sed -r "s/[^\t]+\t([^ ]+) .+$/\1/g")
+			tr " \t" "\n\n" | head -2 | tail -1)
 
 		# If it was http
 		if [[ ${old_remote:0:4} == "http" ]]; then
@@ -93,7 +93,7 @@ function set_http()
 		cd "$i"
 
 		local old_remote=$(git remote -v | \
-			head -1 | sed -r "s/[^\t]+\t([^ ]+) .+$/\1/g")
+			tr " \t" "\n\n" | head -2 | tail -1)
 
 		# If it was ssh
 		if [[ ${old_remote:0:4} == "git@" ]]; then

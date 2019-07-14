@@ -22,7 +22,7 @@ function parse_flags()
 			http*)     http="true"      ;;
 			ssh)       ssh="true"       ;;
 
-			*) echo "Option '--$arg' not recognized, see gloner --help."
+			*) echoerr "Option '--$arg' not recognized, see gloner --help."
 				exit 1 ;;
 		esac
 	else
@@ -43,7 +43,7 @@ function parse_flags()
 				R) recursive="true" ;;
 				v) verbose="true"   ;;
 
-				*) echo "Unknown option '-$arg', see gloner --help."
+				*) echoerr "Unknown option '-$arg', see gloner --help."
 					exit 1 ;;
 			esac
 
@@ -71,7 +71,7 @@ function parse_arguments()
 
 	# If no command is given
 	if [[ "$number_of_arguments" == 0 ]]; then
-		echo "No command given."
+		echoerr "No command given."
 		show_help
 		exit 1
 	fi

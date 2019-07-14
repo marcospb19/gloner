@@ -20,7 +20,7 @@ parse_arguments "$@"
 
 # If no command is given
 if [[ "$number_of_arguments" == 0 ]]; then
-	echo "No arguments given."
+	echoerr "No arguments given."
 	show_help_and_exit
 fi
 
@@ -36,7 +36,7 @@ case "$command" in
 	sethttp) set_http "${arguments[@]}" ;;
 	setssh)  set_ssh  "${arguments[@]}" ;;
 
-	*)  echo "Invalid command: \"$command\""
+	*)  echoerr "Invalid command: \"$command\""
 		show_help_and_exit ;;
 esac
 

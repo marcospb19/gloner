@@ -14,8 +14,8 @@ function list_available_commands()
 
 		    Remote:
 		        geturl  <Folders>                    [-v|--verbose] [-R|--recursive]
-		        sethttp <Folders>                    [-v|--verbose] [-R|--recursive]
 		        setssh  <Folders>                    [-v|--verbose] [-R|--recursive]
+		        sethttp <Folders>                    [-v|--verbose] [-R|--recursive]
 
 	EOT
 }

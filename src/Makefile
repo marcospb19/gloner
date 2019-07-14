@@ -1,5 +1,6 @@
 .DEFAULT_GOAL = gloner
 .PHONY = clean
+.PHONY = install
 
 files = executable header.sh functions.sh help.sh parse.sh check.sh clone.sh remote.sh gloner.sh
 
@@ -23,10 +24,14 @@ gloner: $(files)
 	@echo             >> gloner
 	cat gloner.sh     >> gloner
 
-# Should be ran before every stable release
+# Can be ran before every stable release, maybe
 copy: gloner
 	mv gloner ../
 
 clean:
 	@echo "rm gloner"
 	@rm gloner 2> /dev/null || exit 0
+
+install: gloner
+	@cp gloner /usr/bin/ 2> /dev/null && echo "Gloner installed." \
+		|| echo "You need permissions to install gloner!" ; exit 0
