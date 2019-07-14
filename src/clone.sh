@@ -18,9 +18,31 @@ function clone_repository()
 	# Decide which protocol to use
 	local clone_url
 
+	# If cannot use ssh, just use http
+	if [[ ! -d "$HOME/.ssh" ]]; then
+		clone_url="https://github.com/$user/$repository"
+
+	# If ssh set or http unset, always choose ssh over http
+	elif [[ ! "$http" || "$ssh" == "true" ]]; then
+		clone_url="git@github.com:$user/$repository.git"
+
+	# Else, http was chosen
+	else
+		clone_url="https://github.com/$user/$repository"
+	fi
+
 	clone_url="https://github.com/$user/$repository"
 
-	# Flags can't be quoted here, because they're optional
-	echo "git clone $clone_url $target $flagR $flagv"
-	git clone $clone_url $target $flagR $flagv
+	# Optional flags
+	local flag_R # Empty
+	local flag_v # Empty
+	[[ "$recursive" == "true" ]] &&	flag_R="--recursive"
+	[[ "$verbose"   == "true" ]] &&	flag_v="--verbose"
+
+	# Echo
+	echo "git clone $clone_url $target $flag_R $flag_v"
+
+	# Run
+	git clone "$clone_url" $target $flag_R $flag_v
+	# Note: optional arguments cannot be quoted
 }

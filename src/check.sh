@@ -10,8 +10,7 @@ function check_directories()
 		# If isn't a directory
 		if [[ ! -d "$i" ]]; then
 			exit="true"
-			echoerr "'$i' is not a directory"
-
+			echoerr "\"$(realpath "$i")\" is not a directory"
 		fi
 	done
 
@@ -33,7 +32,7 @@ function check_git_directories()
 		# If isn't a git directory
 		if [[ ! $(git rev-parse --git-dir 2> /dev/null) ]]; then
 			exit="true"
-			echoerr "\"$(realpath "$i")\" is not a git directory"
+			echoerr "\"$(realpath "$i")\" is not a git repository"
 		fi
 	done
 
