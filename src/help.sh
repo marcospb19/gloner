@@ -14,6 +14,8 @@ function list_available_commands()
 
 		    Remote:
 		        geturl  <Folders>                    [-v|--verbose] [-R|--recursive]
+		        sethttp <Folders>                    [-v|--verbose] [-R|--recursive]
+		        setssh  <Folders>                    [-v|--verbose] [-R|--recursive]
 
 	EOT
 }
@@ -32,7 +34,6 @@ function show_help()
 # Just a function wrapper
 function show_help_and_exit()
 {
-	echo
 	show_help
 	exit 1
 }
@@ -67,6 +68,18 @@ function help_command()
 		echo "Usage:"
 		echo "    gloner geturl <Folders> [--verbose]"
 
+	elif [[ "$command" == "setssh" ]]; then # Pending
+		echo "gloner setssh - Change <Folders> remote from http protocol to ssh"
+		echo
+		echo "Usage:"
+		echo "    gloner setssh <Folders> [--verbose]"
+
+	elif [[ "$command" == "sethttp" ]]; then # Pending
+		echo "gloner sethttp - Change <Folders> remote from ssh protocol to http"
+		echo
+		echo "Usage:"
+		echo "    gloner sethttp <Folders> [--verbose]"
+
 	else
 		echoerr "\"$command\" command not recognized."
 		list_available_commands
@@ -75,3 +88,4 @@ function help_command()
 
 	exit 0
 }
+

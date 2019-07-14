@@ -18,9 +18,6 @@ fi
 # Returns $arguments, $number_of_arguments and $command
 parse_arguments "$@"
 
-# Number of arguments + 1 for the command
-number_of_arguments="${#arguments[@]}"
-
 # If no command is given
 if [[ "$number_of_arguments" == 0 ]]; then
 	echo "No arguments given."
@@ -28,11 +25,18 @@ if [[ "$number_of_arguments" == 0 ]]; then
 fi
 
 case "$command" in
-	geturl) get_url          "${arguments[@]}" ;;
-	clone)  clone_repository "${arguments[@]}" ;;
-	help)   help_command     "${arguments[@]}" ;;
+    # Help
+	help)    help_command     "${arguments[@]}" ;;
 
-	*)  echo "Command \"$command\" not recognized"
+    # Clone
+	clone)   clone_repository "${arguments[@]}" ;;
+
+    # Remote
+	geturl)  get_url  "${arguments[@]}" ;;
+	sethttp) set_http "${arguments[@]}" ;;
+	setssh)  set_ssh  "${arguments[@]}" ;;
+
+	*)  echo "Invalid command: \"$command\""
 		show_help_and_exit ;;
 esac
 

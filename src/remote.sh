@@ -46,8 +46,69 @@ function set_ssh()
 	check_directories     "$@"
 	check_git_directories "$@"
 
+
 	# Path to return after every cd travel
 	local return_path=$(pwd)
 
-	new_remote=$()
+	for i in "$@"; do
+		cd "$i"
+
+		local old_remote=$(git remote -v | \
+			head -1 | sed -r "s/[^\t]+\t([^ ]+) .+$/\1/g")
+
+		# If it was http
+		if [[ ${old_remote:0:4} == "http" ]]; then
+			local new_remote=$(echo "$old_remote" | sed -r \
+				"s/^.+\.com\/([^\/]+)\/(.+)$/git@github.com:\1\/\2.git/g")
+			git remote set-url origin "$new_remote" # Swapped
+
+		elif [[ ${old_remote:0:4} == "git@" ]]; then
+			echo "\"$(pwd)\", There's nothing to do."
+
+		else
+			echoerr "Unknown url format at $(pwd), cannot transform"
+			exit 2
+		fi
+
+		cd "$return_path"
+	done
+}
+
+function set_http()
+{
+	if [[ "$#" == 0 ]]; then
+		echoerr "No arguments given."
+		exit 1
+	fi
+
+	# Check if the arguments are valid directories, and exit if they aren't
+	check_directories     "$@"
+	check_git_directories "$@"
+
+
+	# Path to return after every cd travel
+	local return_path=$(pwd)
+
+	for i in "$@"; do
+		cd "$i"
+
+		local old_remote=$(git remote -v | \
+			head -1 | sed -r "s/[^\t]+\t([^ ]+) .+$/\1/g")
+
+		# If it was ssh
+		if [[ ${old_remote:0:4} == "git@" ]]; then
+			local new_remote=$(echo "$old_remote" | sed -r \
+				"s/^.+\.com:([^\/]+)\/(.+)\.git$/https:\/\/github.com\/\1\/\2/g")
+			git remote set-url origin "$new_remote" # Swapped
+
+		elif [[ ${old_remote:0:4} == "http" ]]; then
+			echo "\"$(pwd)\", There's nothing to do."
+
+		else
+			echoerr "Unknown url format at $(pwd), cannot transform"
+			exit 2
+		fi
+
+		cd "$return_path"
+	done
 }
