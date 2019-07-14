@@ -52,21 +52,22 @@ function parse_flags()
 }
 
 # Receives all arguments passed to gloner and filter flags
-# Returns $arguments and $number_of_arguments
+# Returns $arguments, $number_of_arguments and $command
 function parse_arguments()
 {
-	arguments=()
+	# Temporary variable, will transfer to $arguments at the end
+	local args=()
 
 	for i in "$@"; do
 		# Check if first character is a hyphen
 		if [[ "${i:0:1}" == "-" ]]; then
 			parse_flags "$i"
 		else
-			arguments+=("$i")
+			args+=("$i")
 		fi
 	done
 
-	number_of_arguments="${#arguments[@]}"
+	number_of_arguments="${#args[@]}"
 
 	# If no command is given
 	if [[ "$number_of_arguments" == 0 ]]; then
@@ -75,4 +76,7 @@ function parse_arguments()
 		exit 1
 	fi
 
+	# Pop first argument from $args to $command
+	command="${args[0]}"
+	arguments=("${args[@]:1}")
 }
