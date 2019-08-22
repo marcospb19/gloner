@@ -9,7 +9,8 @@ function get_url()
 {
 	# If no folders passed, execute on current folder
 	if [[ "$#" == 0 ]]; then
-		1="."
+		get_url $(pwd)
+		return
 	fi
 
 	# Check if the arguments are valid directories, and exit if they aren't
@@ -35,11 +36,13 @@ function get_url()
 	done
 }
 
+# Reformat the url from http to ssh
 function set_ssh()
 {
+	# If no folders passed, execute on current folder
 	if [[ "$#" == 0 ]]; then
-		echoerr "No arguments given."
-		exit 1
+		set_ssh $(pwd)
+		return
 	fi
 
 	# Check if the arguments are valid directories, and exit if they aren't
@@ -74,11 +77,13 @@ function set_ssh()
 	done
 }
 
+# Reformat the url from ssh to http
 function set_http()
 {
+	# If no folders passed, execute on current folder
 	if [[ "$#" == 0 ]]; then
-		echoerr "No arguments given."
-		exit 1
+		set_http $(pwd)
+		return
 	fi
 
 	# Check if the arguments are valid directories, and exit if they aren't
@@ -111,4 +116,39 @@ function set_http()
 
 		cd "$return_path"
 	done
+}
+
+# List the github repositories from an user
+function list_repositories()
+{
+	if [[ "$#" == 0 ]]; then
+		echoerr "No arguments given."
+		exit 1
+
+	elif [[ "$#" > 1 ]]; then
+		echoerr "Too much arguments given."
+		exit 1
+	fi
+
+	local user="$1"
+
+	local request_url="https://api.github.com/users/$user/repos"
+	local request_result="$(curl -s "$request_url")"
+	local result_size="${#request_result}"
+
+	if [[ "$result_size" == 4 ]]; then
+		echo "The user don't have any repositories."
+
+	elif [[ "$result_size" == 116 ]]; then
+		echo "The user don't exists"
+
+	else
+		echo "Request successful"
+	# 	echo
+	# 	echo "$user repositories:"
+	# 	echo
+		echo $request_result \
+			| grep -oE "git@[^:]+:[^/]+/[^\.]+\.git" \
+			| sed -r "s/(git@[^:]+:|\.git)//g"
+	fi
 }

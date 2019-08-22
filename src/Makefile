@@ -33,5 +33,6 @@ clean:
 	@rm gloner 2> /dev/null || exit 0
 
 install: gloner
-	@cp gloner /usr/bin/ 2> /dev/null && echo "Gloner installed." \
+	@cp gloner /usr/bin/ 2> /dev/null         \
+		&& echo "Gloner installed, Thank you!" \
 		|| echo "You need permissions to install gloner!" ; exit 0

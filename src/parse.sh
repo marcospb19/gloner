@@ -77,6 +77,7 @@ function parse_arguments()
 	fi
 
 	# Pop first argument from $args to $command
+	number_of_arguments=$(( $number_of_arguments - 1 ))
 	command="${args[0]}"
 	arguments=("${args[@]:1}")
 }

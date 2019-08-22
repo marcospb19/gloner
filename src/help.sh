@@ -80,6 +80,18 @@ function help_command()
 		echo "Usage:"
 		echo "    gloner sethttp <Folders> [--verbose]"
 
+	elif [[ "$command" == "root" ]]; then # Pending
+		echo "root help - Just in case you clone something as the root user"
+		echo
+		echo "Problems:"
+		echo "    The repository is owned by root, and cannot be worked on."
+		echo
+		echo "Solution:"
+		echo "    As your main user, run the following command"
+		echo "    \"sudo chown $USER $HOME --recursive\""
+		echo
+		echo "    This will change the ownage to your user."
+
 	else
 		echoerr "\"$command\" command not recognized."
 		list_available_commands
