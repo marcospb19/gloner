@@ -19,7 +19,7 @@ function show_version()
 
 	echo "  v$version"
 
-	cat <<- "EOT"
+	cat <<- EOT
 
 		Licensed under MIT.
 		From https://github.com/marcospb19/gloner, feel free to report your

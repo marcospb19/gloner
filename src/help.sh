@@ -2,7 +2,7 @@
 
 function list_available_commands()
 {
-	cat <<- "EOT"
+	cat <<- EOT
 
 		Available commands:
 
@@ -13,6 +13,7 @@ function list_available_commands()
 		        clone  <User> [Repository] [Target]  [--ssh|--http] [-R|--recursive]
 
 		    Remote:
+		    	list    <User>
 		        geturl  <Folders>                    [-v|--verbose] [-R|--recursive]
 		        setssh  <Folders>                    [-v|--verbose] [-R|--recursive]
 		        sethttp <Folders>                    [-v|--verbose] [-R|--recursive]
@@ -22,7 +23,7 @@ function list_available_commands()
 
 function show_help()
 {
-	cat <<- "EOT"
+	cat <<- EOT
 
 		Usage: gloner <Command> [-h|--help] [-V|--version] [-v|--verbose] [-R|--recursive]
 
@@ -45,56 +46,68 @@ function help_command()
 {
 	if [[ "$#" == 0 ]]; then
 		echoerr "No arguments given."
-		exit 1
+		show_help_and_exit
 	fi
 
 	local command="$1"
 
 	if [[ "$command" == "help" ]]; then
-		echo "gloner help - Show help and usage to any gloner command"
-		echo
-		echo "Usage:"
-		echo "    gloner help <Command>"
+		cat <<- EOT
+		    gloner help - Show help and usage to any gloner command
+
+		    Usage:
+		        gloner help <Command>
+		EOT
 
 	elif [[ "$command" == "clone" ]]; then # Pending
-		echo "gloner clone - Clone a repository only by having the user and name"
-		echo
-		echo "Usage:"
-		echo "    gloner clone <User> <Repository> [Target]"
+		cat <<- EOT
+		    gloner clone - Clone a repository only by having the user and name
+
+		    Usage:
+		        gloner clone <User> <Repository> [Target]
+		EOT
 
 	elif [[ "$command" == "geturl" ]]; then
-		echo "gloner geturl - Show the remote URL (origin) from local repositories"
-		echo
-		echo "Usage:"
-		echo "    gloner geturl <Folders> [--verbose]"
+		cat <<- EOT
+		    gloner geturl - Show the remote URL (origin) from local repositories
+
+		    Usage:
+		        gloner geturl <Folders> [--verbose]
+		EOT
 
 	elif [[ "$command" == "setssh" ]]; then # Pending
-		echo "gloner setssh - Change <Folders> remote from http protocol to ssh"
-		echo
-		echo "Usage:"
-		echo "    gloner setssh <Folders> [--verbose]"
+		cat <<- EOT
+		    gloner setssh - Change <Folders> remote from http protocol to ssh
+
+		    Usage:
+		        gloner setssh <Folders> [--verbose]
+		EOT
 
 	elif [[ "$command" == "sethttp" ]]; then # Pending
-		echo "gloner sethttp - Change <Folders> remote from ssh protocol to http"
-		echo
-		echo "Usage:"
-		echo "    gloner sethttp <Folders> [--verbose]"
+		cat <<- EOT
+		    gloner sethttp - Change <Folders> remote from ssh protocol to http
+
+		    Usage:
+		        gloner sethttp <Folders> [--verbose]
+		EOT
 
 	elif [[ "$command" == "root" ]]; then # Pending
-		echo "root help - Just in case you clone something as the root user"
-		echo
-		echo "Problems:"
-		echo "    The repository is owned by root, and cannot be worked on."
-		echo
-		echo "Solution:"
-		echo "    As your main user, run the following command"
-		echo "    \"sudo chown $USER $HOME --recursive\""
-		echo
-		echo "    This will change the ownage to your user."
+		cat <<- EOT
+		    "root help" - Just in case you clone something as root
+
+		    Problems:
+		        The repository is owned by root, and cannot be worked on.
+
+		    Solution:
+		        As your main user, run the following command
+		        "sudo chown $USER $HOME --recursive"
+
+		        This will change the ownage to your user.
+		EOT
 
 	else
 		echoerr "\"$command\" command not recognized."
-		list_available_commands
+		list_available_commands # Different from $show_help_and_exit
 		exit 1
 	fi
 

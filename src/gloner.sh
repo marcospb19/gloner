@@ -3,8 +3,7 @@
 # If no arguments given
 if [[ "$#" == "0" ]]; then
 	echoerr "No arguments given."
-	show_help
-	exit 1
+	show_help_and_exit
 
 # If running with sudo
 elif [[ "$USER" == "root" ]]; then

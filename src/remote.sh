@@ -122,12 +122,12 @@ function set_http()
 function list_repositories()
 {
 	if [[ "$#" == 0 ]]; then
-		echoerr "No arguments given."
-		exit 1
+		echoerr "No user argument given."
+		show_help_and_exit
 
 	elif [[ "$#" > 1 ]]; then
 		echoerr "Too much arguments given."
-		exit 1
+		show_help_and_exit
 	fi
 
 	local user="$1"
