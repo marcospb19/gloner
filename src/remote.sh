@@ -1,10 +1,9 @@
 # remote.sh
 
-# Show the remote URL from current folder
-# Example: gloner geturl
-#
-# If arguments given, show the remote from the folders passed
-# Example: gloner geturl folder1/ folder2/
+# Show the remote from local repositories
+# Usage:
+#     gloner geturl
+#     gloner geturl <Folder> <Folder>...
 function get_url()
 {
 	# If no folders passed, execute on current folder
@@ -36,7 +35,10 @@ function get_url()
 	done
 }
 
-# Reformat the url from http to ssh
+# Reformat the url from HTTP to SSH
+# Usage:
+#     gloner setssh
+#     gloner setssh <Folder> <Folder>...
 function set_ssh()
 {
 	# If no folders passed, execute on current folder
@@ -77,7 +79,10 @@ function set_ssh()
 	done
 }
 
-# Reformat the url from ssh to http
+# Reformat the url from SSH to HTTP
+# Usage:
+#     gloner sethttp
+#     gloner sethttp <Folder> <Folder>...
 function set_http()
 {
 	# If no folders passed, execute on current folder
@@ -119,36 +124,59 @@ function set_http()
 }
 
 # List the github repositories from an user
+# Usage:
+#     gloner list <User>
+#     gloner list <User> <User>...
+# Flags supported:
+#     --ssh --http [-q|--quiet]
 function list_repositories()
 {
 	if [[ "$#" == 0 ]]; then
 		echoerr "No user argument given."
 		show_help_and_exit
-
-	elif [[ "$#" > 1 ]]; then
-		echoerr "Too much arguments given."
-		show_help_and_exit
 	fi
 
-	local user="$1"
+	for user in "$@"; do
 
-	local request_url="https://api.github.com/users/$user/repos"
-	local request_result="$(curl -s "$request_url")"
-	local result_size="${#request_result}"
+		local request_url="https://api.github.com/users/$user/repos"
+		local request_result="$(curl -s "$request_url")"
+		local result_size="${#request_result}"
 
-	if [[ "$result_size" == 4 ]]; then
-		echo "The user don't have any repositories."
+		if [[ "$result_size" == 4 ]]; then
+			if [[ ! "quiet" ]]; then
+				echoerr "The user \"$user\" don't have any repository."
+			fi
 
-	elif [[ "$result_size" == 116 ]]; then
-		echo "The user don't exists"
+		elif [[ "$result_size" == 116 ]]; then
+			if [[ ! "quiet" ]]; then
+				echoerr "The user \"$user\" was not found."
+			fi
 
-	else
-		echo "Request successful"
-	# 	echo
-	# 	echo "$user repositories:"
-	# 	echo
-		echo $request_result \
-			| grep -oE "git@[^:]+:[^/]+/[^\.]+\.git" \
-			| sed -r "s/(git@[^:]+:|\.git)//g"
-	fi
+		elif [[ "$result_size" == 257 ]]; then
+			# Api uses limit reached, should i request to the HTML page?
+			if [[ ! "quiet" ]]; then
+				echoerr "You exceeded the api consume limit of 60 uses per hour :("
+				exit 1
+			fi
+
+		else
+			if [[ "$ssh" ]]; then
+				echo $request_result \
+					| grep -oE "git@[^:]+:[^/]+/[^\.]+\.git"
+
+			elif [[ "$http" ]]; then
+				echo $request_result \
+					| grep -oE "git@[^:]+:[^/]+/[^\.]+\.git" \
+					| sed "s/\.git//g" \
+					| sed -r "s/git@[^:]+:/https:\/\/github.com\//g"
+
+			else
+				echo $request_result \
+					| grep -oE "git@[^:]+:[^/]+/[^\.]+\.git" \
+					| sed -r "s/(git@[^:]+:|\.git)//g"
+			fi
+		fi
+
+		[[ ! "$quiet" ]] && echo
+	done
 }

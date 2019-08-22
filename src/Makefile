@@ -24,10 +24,6 @@ gloner: $(files)
 	@echo             >> gloner
 	cat gloner.sh     >> gloner
 
-# Can be ran before every stable release, maybe
-copy: gloner
-	mv gloner ../
-
 clean:
 	@echo "rm gloner"
 	@rm gloner 2> /dev/null || exit 0

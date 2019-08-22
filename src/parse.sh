@@ -19,6 +19,7 @@ function parse_flags()
 
 			recursive) recursive="true" ;;
 			verbose)   verbose="true"   ;;
+			quiet)     quiet="true"     ;;
 			http*)     http="true"      ;;
 			ssh)       ssh="true"       ;;
 
@@ -42,6 +43,7 @@ function parse_flags()
 
 				R) recursive="true" ;;
 				v) verbose="true"   ;;
+				q) quiet="true"     ;;
 
 				*) echoerr "Unknown option '-$arg', see gloner --help."
 					exit 1 ;;

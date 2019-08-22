@@ -24,7 +24,7 @@ if [[ "$number_of_arguments" == 0 ]]; then
 	show_help_and_exit
 fi
 
-
+# Command to be ran
 case "$command" in
     # Help
 	help)    help_command      "${arguments[@]}" ;;

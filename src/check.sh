@@ -15,7 +15,7 @@ function check_directories()
 	done
 
 	# Note that this function lists every fail before exiting
-	if [[ "$exit" == "true" ]]; then
+	if [[ "$exit" ]]; then
 		exit 1
 	fi
 }
@@ -37,7 +37,7 @@ function check_git_directories()
 	done
 
 	# Note that this function lists every fail before exiting
-	if [[ "$exit" == "true" ]]; then
+	if [[ "$exit" ]]; then
 		exit 1
 	fi
 }

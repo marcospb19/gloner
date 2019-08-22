@@ -39,9 +39,8 @@ function show_help_and_exit()
 	exit 1
 }
 
-# Show described information about other command, called when
-# "gloner help <Command>" is typed, or when a bad usage is detected
-# inside of an command function
+# Show useful information about other command
+# Usage: gloner help <Command>
 function help_command()
 {
 	if [[ "$#" == 0 ]]; then
@@ -59,7 +58,7 @@ function help_command()
 		        gloner help <Command>
 		EOT
 
-	elif [[ "$command" == "clone" ]]; then # Pending
+	elif [[ "$command" == "clone" ]]; then
 		cat <<- EOT
 		    gloner clone - Clone a repository only by having the user and name
 
@@ -75,7 +74,7 @@ function help_command()
 		        gloner geturl <Folders> [--verbose]
 		EOT
 
-	elif [[ "$command" == "setssh" ]]; then # Pending
+	elif [[ "$command" == "setssh" ]]; then
 		cat <<- EOT
 		    gloner setssh - Change <Folders> remote from http protocol to ssh
 
@@ -83,7 +82,7 @@ function help_command()
 		        gloner setssh <Folders> [--verbose]
 		EOT
 
-	elif [[ "$command" == "sethttp" ]]; then # Pending
+	elif [[ "$command" == "sethttp" ]]; then
 		cat <<- EOT
 		    gloner sethttp - Change <Folders> remote from ssh protocol to http
 
@@ -91,7 +90,7 @@ function help_command()
 		        gloner sethttp <Folders> [--verbose]
 		EOT
 
-	elif [[ "$command" == "root" ]]; then # Pending
+	elif [[ "$command" == "root" ]]; then
 		cat <<- EOT
 		    "root help" - Just in case you clone something as root
 
@@ -107,7 +106,8 @@ function help_command()
 
 	else
 		echoerr "\"$command\" command not recognized."
-		list_available_commands # Different from $show_help_and_exit
+
+		list_available_commands # Slighty different from $show_help_and_exit
 		exit 1
 	fi
 
