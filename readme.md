@@ -52,6 +52,8 @@ List all repositories from a user
 ```sh
 gloner list <User>
 gloner list marcospb19
+gloner list marcospb19 torvalds --ssh
+gloner list godot python --http
 ```
 _Yeah, it's true_
 
@@ -64,6 +66,17 @@ gloner clone marcospb19 gloner --ssh
 gloner clone marcospb19 gloner --http
 ```
 _Gloner will automaticaly look for ~/.ssh folder, and detect if you can use ssh_
+
+Some flags sometimes supported (early)
+```sh
+[-h|--help]
+[-V|--version]
+[-R|--recursive]
+[-v|--verbose]
+[-q|--quiet]
+--ssh
+--http
+```
 
 The installation is so simple you should try it right now :D
 
