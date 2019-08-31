@@ -30,7 +30,8 @@ case "$command" in
 	help)    help_command      "${arguments[@]}" ;;
 
     # Clone
-	clone)   clone_repository  "${arguments[@]}" ;;
+	clone)           clone_repository             "${arguments[@]}" ;;
+	clonemultiple)   clone_multiple_repositories  "${arguments[@]}" ;;
 
     # Remote
 	list)    list_repositories "${arguments[@]}" ;;

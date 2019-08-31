@@ -2,9 +2,9 @@
 
 Gloner stands for Git cLONER, but it does more
 
-Save your time and go spend it on something else
+Save your time with this and go spend it on something else
 
-Then thank me for wasting mine doing this
+Then thank me for wasting mine doing it
 
 ### Bad table of contents
 
@@ -22,48 +22,45 @@ make install
 
 # Usage
 
-See help for any command
+See resumed list of available commands
+```sh
+gloner --help
+```
+
+See detailed help for any command (Very useful)
 ```sh
 gloner help <Command>
-gloner help help
-gloner help clone
-gloner help list
 ```
 
 Get the remote URL from local repositories
 ```sh
-gloner geturl
-gloner geturl folder1 folder2 folder3
+gloner geturl # Assumes current folder
+gloner geturl folder1 folder2...
 ```
 
 Set the remote URL to SSH format
 ```sh
-gloner setssh
-gloner setssh folder1 folder2 folder3
+gloner setssh # Assumes current folder
+gloner setssh folder1 folder2...
 ```
 
 Set the remote URL to HTTP format
 ```sh
-gloner sethttp
-gloner sethttp folder1 folder2 folder3
+gloner sethttp # Assumes current folder
+gloner sethttp folder1 folder2...
 ```
 
-List all repositories from a user
+List all repositories from a user (use flag to see the remotes)
 ```sh
 gloner list <User>
 gloner list marcospb19
-gloner list marcospb19 torvalds --ssh
-gloner list godot python --http
+gloner list marcospb19 --http
+gloner list python torvalds --ssh
 ```
-_Yeah, it's true_
 
-Clone repository without the URL
+Easy repository clone without the URL
 ```sh
-gloner clone <User> <Repository>
-gloner clone <User> <Repository> <Target>
-gloner clone marcospb19 gloner
-gloner clone marcospb19 gloner --ssh
-gloner clone marcospb19 gloner --http
+gloner clone <User> <Repository> [Target] [--ssh|--http]
 ```
 _Gloner will automaticaly look for ~/.ssh folder, and detect if you can use ssh_
 

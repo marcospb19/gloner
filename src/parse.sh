@@ -34,7 +34,7 @@ function parse_flags()
 
 		# For each letter after the hyphen, process the flags
 		# Example: "-hv", process flags 'h' and 'v'
-		for (( i = 1 ; i < $size ; i++ )); do
+		for (( i = 1 ; i < size ; i++ )); do
 			arg="${input:$i:1}"
 
 			case "$arg" in

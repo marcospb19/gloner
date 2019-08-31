@@ -161,17 +161,17 @@ function list_repositories()
 
 		else
 			if [[ "$ssh" ]]; then
-				echo $request_result \
+				echo "$request_result" \
 					| grep -oE "git@[^:]+:[^/]+/[^\.]+\.git"
 
 			elif [[ "$http" ]]; then
-				echo $request_result \
+				echo "$request_result" \
 					| grep -oE "git@[^:]+:[^/]+/[^\.]+\.git" \
 					| sed "s/\.git//g" \
 					| sed -r "s/git@[^:]+:/https:\/\/github.com\//g"
 
 			else
-				echo $request_result \
+				echo "$request_result" \
 					| grep -oE "git@[^:]+:[^/]+/[^\.]+\.git" \
 					| sed -r "s/(git@[^:]+:|\.git)//g"
 			fi
