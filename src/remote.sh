@@ -1,5 +1,87 @@
 # remote.sh
 
+# List the github repositories from an user
+# Usage:
+#     gloner list <User>
+#     gloner list <User> <User>...
+# Flags supported:
+#     --ssh | --http | [-q|--quiet]
+# TODO: support --verbose flag, to show the repository size
+function list_repositories()
+{
+	if [[ "$#" == 0 ]]; then
+		show_help_and_exit "No user argument given."
+	fi
+
+	for user in "$@"; do
+
+		local request_url="https://api.github.com/users/$user/repos"
+		local request_result="$(curl -s "$request_url")"
+		local result_size="${#request_result}"
+
+		# Error checks
+		#
+		# The following numbers are from error messages from the GitHub API
+		if [[ "$result_size" == 4 ]]; then
+			if [[ ! "$quiet" ]]; then
+				echoerr "The user \"$user\" don't have any repository."
+				break
+			fi
+		elif [[ "$result_size" == 116 ]]; then
+			if [[ ! "$quiet" ]]; then
+				echoerr "The user \"$user\" was not found."
+				break
+			fi
+		elif [[ "$result_size" == 257 ]]; then
+			# Api uses limit reached, workaround? (should i request to the HTML page?)
+			# TODO: when limit reached, make the request to the GitHub HTML page
+			if [[ ! "$quiet" ]]; then
+				echoerr "I'm sorry ;-;"
+				echoerr "You exceeded the GitHub API limit of 60 uses per hour"
+				exit 2
+			fi
+		fi
+
+		# If verbose print the size of the repository
+		if [[ "$verbose" ]]; then
+			local sizes=($(echo $request_result \
+				| grep "size"                    \
+				| sed -r "s/[^:]+: ([0-9]+),.*/\1/g"))
+		fi
+
+		if [[ "$ssh" ]]; then
+			local repository_names=($(echo "$request_result" \
+				| grep -oE "git@[^:]+:[^/]+/[^\.]+\.git"))
+
+		elif [[ "$http" ]]; then
+			local repository_names=($(echo "$request_result" \
+				| grep -oE "git@[^:]+:[^/]+/[^\.]+\.git"      \
+				| sed "s/\.git//g"                             \
+				| sed -r "s/git@[^:]+:/https:\/\/github.com\//g"))
+		else
+			local repository_names=($(echo "$request_result" \
+				| grep -oE "git@[^:]+:[^/]+/[^\.]+\.git"      \
+				| sed -r "s/(git@[^:]+:|\.git)//g"))
+		fi
+
+		local quantity_of_repositories=${#repository_names[@]}
+
+
+		# Finally, time to print
+		if [[ "$verbose" ]]; then
+			for (( i = 1; i < $quantity_of_repositories; i++ )); do
+				printf "%6d MB %s\n" "${sizes[$i]}" "${repository_names[$i]}"
+			done
+
+		else
+			for i in ${repository_names[@]}; do
+				echo $i
+			done
+		fi
+
+	done
+}
+
 # Show the remote from local repositories
 # Usage:
 #     gloner geturl
@@ -27,8 +109,9 @@ function get_url()
 			git remote -v
 			echo
 		else
-			git remote -v | \
-			head -1 | sed -r "s/^[^\t]+\t([^ ]+) .*$/\1/g"
+			git remote -v \
+				| head -1  \
+				| sed -r "s/^[^\t]+\t([^ ]+) .*$/\1/g"
 		fi
 
 		cd "$return_path"
@@ -65,6 +148,7 @@ function set_ssh()
 		if [[ ${old_remote:0:4} == "http" ]]; then
 			local new_remote=$(echo "$old_remote" | sed -r \
 				"s/^.+\.com\/([^\/]+)\/(.+)$/git@github.com:\1\/\2.git/g")
+
 			git remote set-url origin "$new_remote" # Swapped
 
 		elif [[ ${old_remote:0:4} == "git@" ]]; then
@@ -115,68 +199,10 @@ function set_http()
 			echo "\"$(pwd)\", There's nothing to do."
 
 		else
-			echoerr "Unknown url format at $(pwd), cannot transform"
+			echoerr "Unknown url format at $(pwd), cannot transform (no support??)"
 			exit 2
 		fi
 
 		cd "$return_path"
-	done
-}
-
-# List the github repositories from an user
-# Usage:
-#     gloner list <User>
-#     gloner list <User> <User>...
-# Flags supported:
-#     --ssh --http [-q|--quiet]
-function list_repositories()
-{
-	if [[ "$#" == 0 ]]; then
-		echoerr "No user argument given."
-		show_help_and_exit
-	fi
-
-	for user in "$@"; do
-
-		local request_url="https://api.github.com/users/$user/repos"
-		local request_result="$(curl -s "$request_url")"
-		local result_size="${#request_result}"
-
-		if [[ "$result_size" == 4 ]]; then
-			if [[ ! "quiet" ]]; then
-				echoerr "The user \"$user\" don't have any repository."
-			fi
-
-		elif [[ "$result_size" == 116 ]]; then
-			if [[ ! "quiet" ]]; then
-				echoerr "The user \"$user\" was not found."
-			fi
-
-		elif [[ "$result_size" == 257 ]]; then
-			# Api uses limit reached, should i request to the HTML page?
-			if [[ ! "quiet" ]]; then
-				echoerr "You exceeded the api consume limit of 60 uses per hour :("
-				exit 1
-			fi
-
-		else
-			if [[ "$ssh" ]]; then
-				echo "$request_result" \
-					| grep -oE "git@[^:]+:[^/]+/[^\.]+\.git"
-
-			elif [[ "$http" ]]; then
-				echo "$request_result" \
-					| grep -oE "git@[^:]+:[^/]+/[^\.]+\.git" \
-					| sed "s/\.git//g" \
-					| sed -r "s/git@[^:]+:/https:\/\/github.com\//g"
-
-			else
-				echo "$request_result" \
-					| grep -oE "git@[^:]+:[^/]+/[^\.]+\.git" \
-					| sed -r "s/(git@[^:]+:|\.git)//g"
-			fi
-		fi
-
-		[[ ! "$quiet" ]] && echo
 	done
 }

@@ -1,21 +1,40 @@
 # check.sh
 
+# Similar to check_git_directories
+#
 # Checks if array of arguments are valid
 # directories, if one of them isn't, exit
 function check_directories()
 {
-	exit=""
+	# Should exit
+	local should_exit
 
-	for i in "$@"; do
-		# If isn't a directory
-		if [[ ! -d "$i" ]]; then
-			exit="true"
-			echoerr "\"$(realpath "$i")\" is not a directory"
-		fi
-	done
+	if [[ "$recursive" ]]; then
+
+		for i in "$@"; do
+			# If isn't a directory
+			for j in $(find "$i" -type d); do
+				if [[ ! -d "$j" ]]; then
+					should_exit="true"
+					echoerr "\"$(realpath "$i")\" is not a directory"
+				fi
+			done
+		done
+
+	else # [[ ! "$recursive" ]]
+
+		for i in "$@"; do
+			# If isn't a directory
+			if [[ ! -d "$i" ]]; then
+				should_exit="true"
+				echoerr "\"$(realpath "$i")\" is not a directory"
+			fi
+		done
+
+	fi
 
 	# Note that this function lists every fail before exiting
-	if [[ "$exit" ]]; then
+	if [[ "$should_exit" ]]; then
 		exit 1
 	fi
 }
@@ -26,18 +45,36 @@ function check_directories()
 # directories, if one of them isn't, exit
 function check_git_directories()
 {
-	exit=""
+	# Should exit
+	local should_exit
 
-	for i in "$@"; do
-		# If isn't a git directory
-		if [[ ! $(git rev-parse --git-dir 2> /dev/null) ]]; then
-			exit="true"
-			echoerr "\"$(realpath "$i")\" is not a git repository"
-		fi
-	done
+	if [[ "$recursive" ]]; then
 
-	# Note that this function lists every fail before exiting
-	if [[ "$exit" ]]; then
+		for i in "$@"; do
+			for j in $(find "$i" -type d); do
+				if [[ ! $(git rev-parse --git-dir "$j" 2> /dev/null) ]]; then
+					# If isn't a git directory
+					should_exit="true"
+					echoerr "\"$(realpath "$i")\" is not a git repository"
+				fi
+			done
+		done
+
+	else # [[ ! "$recursive" ]]
+
+		for i in "$@"; do
+			if [[ ! $(git rev-parse --git-dir "$i" 2> /dev/null) ]]; then
+				# If isn't a git directory
+				should_exit="true"
+				echoerr "\"$(realpath "$i")\" is not a git repository"
+			fi
+		done
+
+	fi
+
+	# Note that this function lists every fail before
+	# exiting, this is why we need $should_exit
+	if [[ "$should_exit" ]]; then
 		exit 1
 	fi
 }
