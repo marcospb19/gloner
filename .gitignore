@@ -1,6 +1,10 @@
-# A useful test folder and file
+# Local TODO
+TODO
+todo
+
+# Tests folder and file
 test/
 test.sh
 
-# Builded gloner inside the src folder (should be on repo root)
+# Builded gloner inside of the src folder
 src/gloner
