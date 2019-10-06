@@ -63,7 +63,7 @@ function clone_multiple_repositories()
 	local       user="$1"
 
 	local repositories=()
-	for i in ${@:2}; do
+	for i in "${@:2}"; do
 		repositories+=("$i")
 	done
 
@@ -92,7 +92,7 @@ function clone_multiple_repositories()
 	# Echo
 	echo "clone $user [${@:2}] $target $flag_R $flag_v"
 
-	for repo in ${@:2}; do
+	for repo in "${@:2}"; do
 		git clone "$clone_url_base/$repo" $target $flag_R $flag_v
 	done
 
