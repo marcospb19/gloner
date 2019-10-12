@@ -113,4 +113,3 @@ function help_command()
 
 	exit 0
 }
-
